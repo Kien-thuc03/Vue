@@ -8,25 +8,37 @@
         <div class="hero-content">
           <div class="hero-icons" ref="iconRef">
             <span class="icon-star">✦</span>
-            <span class="icon-star">✦</span>
           </div>
           <h1 class="hero-title" ref="titleRef">PORTFOLIO</h1>
           <div class="hero-sub" ref="subRef">NGUYỄN KIẾN THỨC</div>
         </div>
         <div class="hero-art"></div>
       </section>
-      <!-- Projects Section -->
-      <section class="projects-section">
+      <!-- Projects Timeline Section -->
+      <section class="projects-timeline-section">
         <h2 class="projects-title">DỰ ÁN NỔI BẬT</h2>
-        <div class="project-list">
-          <div v-for="(project, i) in projects" :key="project.title" class="project-card" :ref="el => projectRefs[i] = el">
-            <img :src="project.img" :alt="project.title" class="project-img" />
-            <div class="project-info">
-              <h4>{{ project.title }}</h4>
-              <p>{{ project.desc }}</p>
-              <div class="project-links">
-                <a v-if="project.demo" :href="project.demo" target="_blank">Demo</a>
-                <a v-if="project.github" :href="project.github" target="_blank">GitHub</a>
+        <div class="timeline-pro">
+          <div v-for="(project, i) in projects" :key="project.title" class="timeline-pro-item" :ref="el => projectRefs[i] = el">
+            <div class="timeline-pro-dot-wrap">
+              <div class="timeline-pro-dot">{{ i + 1 }}</div>
+              <div class="timeline-pro-line" v-if="i < projects.length - 1"></div>
+            </div>
+            <div class="timeline-pro-content">
+              <div class="timeline-pro-card">
+                <div class="timeline-pro-img-wrap">
+                  <img :src="project.img" :alt="project.title" />
+                </div>
+                <div class="timeline-pro-info">
+                  <h3>{{ project.title }}</h3>
+                  <div class="project-tags">
+                    <span v-for="tag in project.tags" :key="tag">{{ tag }}</span>
+                  </div>
+                  <p>{{ project.desc }}</p>
+                  <div class="timeline-links">
+                    <a v-if="project.demo" :href="project.demo" target="_blank" class="btn-pro demo">Demo</a>
+                    <a v-if="project.github" :href="project.github" target="_blank" class="btn-pro github">GitHub</a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -52,23 +64,26 @@ const projects = [
   {
     title: 'Landing Page Sản phẩm',
     desc: 'Thiết kế và code landing page chuyển đổi cao, hiệu ứng động mượt mà, responsive.',
-    img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+    img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
     demo: 'https://your-landingpage-demo.com',
-    github: 'https://github.com/your-github/landing-page'
+    github: 'https://github.com/your-github/landing-page',
+    tags: ['Vue', 'GSAP', 'UI/UX']
   },
   {
     title: 'Dashboard Quản trị',
     desc: 'Xây dựng dashboard realtime với Vue3, Pinia, Chart.js, tối ưu UX cho admin.',
-    img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=400&q=80',
+    img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80',
     demo: '',
-    github: 'https://github.com/your-github/dashboard-vue'
+    github: 'https://github.com/your-github/dashboard-vue',
+    tags: ['Vue', 'Pinia', 'Chart.js']
   },
   {
     title: 'Portfolio Animation',
     desc: 'Portfolio cá nhân với hiệu ứng động Anime.js, tối ưu SEO, điểm Lighthouse cao.',
-    img: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
+    img: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80',
     demo: 'https://your-portfolio-demo.com',
-    github: ''
+    github: '',
+    tags: ['Vue', 'Anime.js', 'SEO']
   }
 ]
 
@@ -233,70 +248,178 @@ onMounted(() => {
   z-index: 1;
 }
 
-.projects-section {
+.projects-timeline-section {
   background: var(--color-bg);
   padding: 2.5rem 0 2.5rem 0;
 }
-.projects-title {
-  font-size: 2.1rem;
-  font-weight: 800;
-  color: var(--color-primary);
-  margin-bottom: 1.5rem;
-  letter-spacing: 0.01em;
-  text-align: center;
-}
-.project-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  justify-content: center;
-}
-.project-card {
-  background: #fff;
-  border-radius: var(--radius-main);
-  box-shadow: var(--shadow-main);
-  border: 1px solid var(--color-border);
-  width: 320px;
-  overflow: hidden;
+.timeline-pro {
+  position: relative;
+  margin: 0 auto;
+  max-width: 900px;
+  padding: 2rem 0 2rem 0;
   display: flex;
   flex-direction: column;
-  transition: transform 0.18s, box-shadow 0.18s;
+  gap: 0;
 }
-.project-card:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 8px 32px #00e0ff33;
+.timeline-pro-item {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  min-height: 180px;
+  margin-bottom: 0;
 }
-.project-img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-top-left-radius: var(--radius-main);
-  border-top-right-radius: var(--radius-main);
+.timeline-pro-dot-wrap {
+  position: relative;
+  width: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
 }
-.project-info {
-  padding: 1.2em 1.2em 1.5em 1.2em;
-  flex: 1;
-}
-.project-info h4 {
+.timeline-pro-dot {
+  width: 38px;
+  height: 38px;
+  background: var(--color-accent);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
   font-size: 1.2rem;
+  box-shadow: 0 2px 8px #00e0ff33;
+  margin-top: 0;
+  margin-bottom: 0;
+  z-index: 2;
+}
+.timeline-pro-line {
+  width: 4px;
+  height: calc(100% - 38px);
+  background: linear-gradient(to bottom, var(--color-accent), #e0eafc);
+  margin-top: 0;
+  border-radius: 2px;
+  z-index: 1;
+}
+.timeline-pro-content {
+  flex: 1;
+  padding-left: 0;
+  display: flex;
+  align-items: flex-start;
+}
+.timeline-pro-card {
+  display: flex;
+  align-items: flex-start;
+  background: #181c2f;
+  color: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 32px #7f5fff22;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2.5rem;
+  min-height: 160px;
+  width: 100%;
+  gap: 2rem;
+  transition: box-shadow 0.2s, transform 0.2s;
+  border: 1px solid var(--color-border);
+  &:hover {
+    box-shadow: 0 8px 32px #00e0ff55;
+    transform: translateY(-6px) scale(1.03);
+  }
+}
+.timeline-pro-img-wrap {
+  width: 120px;
+  min-width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px #7f5fff11;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.timeline-pro-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.timeline-pro-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5em;
+}
+.timeline-pro-info h3 {
+  font-size: 1.15rem;
   font-weight: 800;
   color: var(--color-primary);
+  margin: 0 0 0.2em 0;
+}
+.project-tags {
   margin-bottom: 0.3em;
 }
-.project-info p {
-  color: var(--color-subtext);
-  font-size: 1rem;
-  margin-bottom: 0.7em;
+.project-tags span {
+  display: inline-block;
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 0.92em;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 0.25em 0.9em;
+  margin-right: 0.6em;
+  margin-bottom: 0.3em;
+  letter-spacing: 0.03em;
 }
-.project-links a {
-  margin-right: 1em;
-  color: var(--color-accent);
+.timeline-pro-info p {
+  color: #e0eafc;
+  font-size: 1.05rem;
+  margin-bottom: 0.5em;
+}
+.timeline-links {
+  margin-bottom: 0.5em;
+}
+.btn-pro {
+  display: inline-block;
   font-weight: 700;
-  font-size: 1.05em;
-  transition: color 0.18s;
+  font-size: 1em;
+  border-radius: 999px;
+  padding: 0.5em 1.5em;
+  margin-right: 1em;
+  background: var(--color-gradient);
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 2px 8px #7f5fff22;
+  transition: background 0.18s, color 0.18s, transform 0.18s;
 }
-.project-links a:hover {
-  color: var(--color-primary);
+.btn-pro.github {
+  background: #fff;
+  color: #181c2f;
+}
+.btn-pro.demo:hover {
+  background: var(--color-primary);
+}
+.btn-pro.github:hover {
+  background: var(--color-accent);
+  color: #fff;
+}
+@media (max-width: 900px) {
+  .timeline-pro {
+    max-width: 98vw;
+    padding: 0;
+  }
+  .timeline-pro-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.2rem 1rem;
+    gap: 1rem;
+  }
+  .timeline-pro-img-wrap {
+    width: 100%;
+    min-width: 0;
+    height: 180px;
+    margin-bottom: 1rem;
+  }
 }
 
 .portfolio-footer {
@@ -332,14 +455,6 @@ onMounted(() => {
 }
 
 @media (max-width: 900px) {
-  .project-list {
-    flex-direction: column;
-    align-items: center;
-  }
-  .project-card {
-    width: 100%;
-    max-width: 400px;
-  }
   .portfolio-header, .portfolio-footer {
     padding-left: 1rem;
     padding-right: 1rem;
@@ -352,7 +467,7 @@ onMounted(() => {
   .hero-title {
     font-size: 2.2rem;
   }
-  .projects-section {
+  .projects-timeline-section {
     padding: 1.2rem 0.5rem 1.2rem 0.5rem;
   }
 }
